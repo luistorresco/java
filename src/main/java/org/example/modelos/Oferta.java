@@ -1,26 +1,31 @@
 package org.example.modelos;
 
+import org.example.validaciones.OfertaValidacion;
+
 import java.util.Date;
+import org.example.utilidades.Util;
+import java.time.LocalDate;
 
 public class Oferta {
     private int id;
     private String titulo;
     private String descripcion;
-    private Date FechaInicio;
-    private Date FechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private Double costopersona;
     private int idlocal;
 
-
+private OfertaValidacion validacion=new OfertaValidacion();
+private Util util=new Util();
     public Oferta() {
     }
 
-    public Oferta(int id, String titulo, String descripcion, Date fechaInicio, Date fechaFin, Double costopersona, int idlocal) {
+    public Oferta(int id, String titulo, String descripcion, LocalDate fechaInicio, LocalDate fechaFin, Double costopersona, int idlocal) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
-        FechaInicio = fechaInicio;
-        FechaFin = fechaFin;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
         this.costopersona = costopersona;
         this.idlocal = idlocal;
     }
@@ -31,8 +36,8 @@ public class Oferta {
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
-                ", FechaInicio=" + FechaInicio +
-                ", FechaFin=" + FechaFin +
+                ", FechaInicio=" + fechaInicio +
+                ", FechaFin=" + fechaFin +
                 ", costopersona=" + costopersona +
                 ", idlocal=" + idlocal +
                 '}';
@@ -51,7 +56,13 @@ public class Oferta {
     }
 
     public void setTitulo(String titulo) {
-        this.titulo = titulo;
+
+        try {
+            this.validacion.validarTitulo(titulo);
+            this.titulo=titulo;
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+        }
     }
 
     public String getDescripcion() {
@@ -62,20 +73,32 @@ public class Oferta {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaInicio() {
-        return FechaInicio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
-        FechaInicio = fechaInicio;
+    public void setFechaInicio(String fechaInicio) {
+        try {
+            this.validacion.validarFormatoFechas(fechaInicio);
+            this.fechaInicio=this.util.convertitStringEnLocaDate(fechaInicio);
+
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+        }
     }
 
-    public Date getFechaFin() {
-        return FechaFin;
+    public LocalDate getFechaFin() {
+        return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
-        FechaFin = fechaFin;
+    public void setFechaFin(String fechaFin) {
+        try {
+            this.validacion.validarFormatoFechas(fechaFin);
+            this.validacion.validarTodasFechas(this.fechaInicio,this.util.convertitStringEnLocaDate(fechaFin));
+            this.fechaInicio = this.util.convertitStringEnLocaDate(fechaFin);
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+        }
     }
 
     public Double getCostopersona() {
@@ -83,7 +106,12 @@ public class Oferta {
     }
 
     public void setCostopersona(Double costopersona) {
-        this.costopersona = costopersona;
+        try {
+            this.validacion.validarCostoPersona(costopersona);
+            this.costopersona=costopersona;
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+        }
     }
 
     public int getIdlocal() {
