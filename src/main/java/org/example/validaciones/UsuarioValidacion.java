@@ -32,7 +32,7 @@ public class UsuarioValidacion {
     }
 
     public Boolean validarCorreo(String correo) throws Exception {
-        if (!util.buscarConcidencia(correo, "^[\\w-+]+(\\.[\\w-]{1,62}){0,126}@[\\w-]{1,63}(\\.[\\w-]{1,62})+/[\\w-]+$")) {
+        if (!util.buscarConcidencia(correo, "^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new Exception(Mensaje.VALIDACION_CORREO.getMensaje());
         }
         return true;
